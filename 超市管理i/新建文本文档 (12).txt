@@ -1,0 +1,781 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<windows.h>
+#include<time.h>
+#include<string.h>
+
+
+
+void showmenu()          //显示主菜单
+{
+	system("cls");
+	printf("\n\n\n\n");
+	printf("              |----------------------商品管理---------------------|\n");
+	printf("              |                                                   |\n");
+	printf("              |                                                   |\n");
+	printf("              |             1.添加商品                            |\n");
+	printf("              |             2.销售商品                            |\n");
+	printf("              |             3.删除商品                            |\n");
+	printf("              |             4.修改商品                            |\n");
+	printf("              |             5.查询商品                            |\n");
+	printf("              |             6.显示商品                            |\n");
+	printf("              |             7.订单查询                            |\n");
+	printf("              |                                                   |\n");
+	printf("              |          请您从1—7中作出选择!!!                  |\n");
+	printf("              |                                                   |\n");
+	printf("              |                                                   |\n");
+	printf("              |---------------------------------------------------|\n");
+
+}
+
+
+void inputproduct()                   //商品添加
+{
+
+	FILE* z4;  
+	FILE* z7;
+	int z1,z2=0,z3=0,i,z8;                          //选择
+	char ch;
+
+	struct pro                   //商品保存结构体
+	{
+		int id;//4
+		char name[25];//28
+		char producer[25];//28
+		char date[30];//32
+		int price;//4
+		int amount;//4
+		char beizhu[80];//80
+	}pro[100],all[100];
+z:	system("cls");                    //清除上一页
+	printf("              |                                                   |\n");
+	printf("              |                  欢迎进入商品添加                 |\n");
+	printf("              |                                                   |\n");	
+	printf("              |            1.添加商品           2.退出            |\n");
+	printf("              |---------------------------------------------------|\n");
+	printf("                            您的选择:");
+	scanf("%d",&z1);
+	if(z1>2||z1<1)                             //判断选择功能是否正确
+	{                           
+	printf("\n                  您输入的选项不存在，请3秒后重新选择!!!\n");
+	Sleep(3000);                            //延时3秒
+
+	goto z;                                //回到以前重新输入
+	}
+	getchar();
+	if(z1==1)                               //打开原来文件
+	{
+		z4=fopen("d:\\temp\\temp.txt","rb");
+		while(!feof(z4))                           //判断文件是否结束
+			if(fread(&pro[z2++],sizeof(struct pro),1,z4)==1)     //统计文件中记录的条数
+				z3++;
+				//printf("%d",z3);                  //z3大小查看
+		if(z3==0)
+			printf("\n\n\t\t没有商品,请先添加商品!!!\n");
+		else
+		{
+		fflush(stdin);
+		printf("\n\n编号\t品名\t生产商\t生产日期\t价格\t数量\n");
+		for(z2=0;z2<z3;z2++)
+		{
+		//printf("%d\n\n",z2);
+		//fread(&pro[z2],sizeof(struct pro),1,z4);  
+		printf("%d\t",pro[z2].id+1);
+
+		printf("%s\t",pro[z2].name);
+
+		printf("%s\t",pro[z2].producer);
+
+		printf("%s\t",pro[z2].date);
+
+		printf("%d\t",pro[z2].price);
+	
+		printf("%d\t",pro[z2].amount);
+
+		printf("%s\n",pro[z2].beizhu);
+
+		}
+		fclose(z4);
+		puts("");                                      //增大距离
+		}
+		
+		if((z4=fopen("d:\\temp\\temp.txt","ab"))==NULL)//判断文件是否存在
+		{
+			printf("\n          打开文件失败");
+			return ;
+		}
+	z7=fopen("d:\\temp\\tem.txt","rb");
+		while(!feof(z7))                           //判断文件是否结束
+			if(fread(&pro[z8++],sizeof(struct pro),1,z4)==1)     //统计文件中记录的条数
+				z8++	;
+					fclose(z7);
+					
+	printf("请输入文件，Tab+Ender键结束,继续输入直接Entenr\n");//添加功能部分
+    do
+	{
+
+		pro[z2].id=z3;
+		all[z8].id=23;
+		printf("编号\n%d\n",pro[z2].id+1);
+		
+		printf("品名\n");
+	z6:	scanf("%s",&pro[z2].name);
+		//strcP(pro[z2].name,all[z7].name);     拷贝
+		for(z1=0;z1<z3;z1++)
+		i=strcmp(pro[z1].name,pro[z2].name);                    //是否一样，存在
+		if(!i)
+		{
+		printf("\t\t\t货物以存在，请重新输入!!!\n");
+		goto z6;
+		}
+		//getchar();
+		printf("生产商\n");
+		scanf("%s",&pro[z2].producer);
+		strcmP(pro[z2].producer,all[z7].producer);
+		getchar();
+		
+		printf("日期.例17-12-05\n");
+		scanf("%s",&pro[z2].date);
+		strcmP(pro[z2].date,all[z7].date);
+
+		printf("价格\n");
+		fflush(stdin);
+		scanf("%d",&pro[z2].price);
+		pro[z7].price=all[z2].price;
+
+		printf("数量\n");
+		scanf("%d",&pro[z2].amount);
+		pro[z7].amount=all[z2].amount;
+
+		printf("备注\n");
+		scanf("%s",&pro[z2].beizhu);
+		strcmP(pro[z2].beizhu,all[z7].beizhu);
+	
+		fwrite(&all[z8],sizeof(struct all),1,z4);       //将添加信息填入all
+		if(fwrite(&pro[z2],sizeof(struct pro),1,z4)!=1)
+			printf("\n          文件写入失败");
+		getchar();
+	ch=getchar();                              //是否结束\t的
+	z3++;
+	}while(ch!='\t');
+	
+	fclose(z4);
+	goto z;
+	//	z4=fopen("d:\\temp\\temp.txt","wb");
+	//	if(z4!=NULL)
+	//	{
+	//	while(!feof(z4))
+	//		printf("%c",fgetc(z4));
+	//	    printf("\r");                    //回到首字符
+//z5:	while((ch!='\t'))
+//		{
+//			//scanf("%d",&a1[0].id);
+//			fputc(ch,z4);
+//		goto z5;
+//		}
+//		}
+		//else
+		//	printf("            文件打开失败         \n");
+	
+	//	fclose(z4);
+	}
+	else
+		return ;                       //返回主菜单
+}
+
+void outputproduct()                   //商品销售
+{
+		FILE* z4;                          //
+	int z1,z2=0,z3=0,z6,i;                          //选择
+	char ch;
+
+	struct pro                   //商品保存结构体
+	{
+		int id;
+		char name[25];
+		char producer[25];
+		char date[30];
+		int price;
+		int amount;
+		char beizhu[80];
+	}pro[100],all[100];
+z:	system("cls");                    //清除上一页
+	printf("              |                                                   |\n");
+	printf("              |                  欢迎进入商品销售                 |\n");
+	printf("              |                                                   |\n");	
+	printf("              |            1.销售商品           2.退出            |\n");
+	printf("              |---------------------------------------------------|\n");
+	printf("                            您的选择:");
+	scanf("%d",&z1);
+	if(z1>2||z1<1)                             //判断选择功能是否正确
+	{                           
+	printf("\n                  您输入的选项不存在，请3秒后重新选择!!!\n");
+	Sleep(3000);                            //延时3秒
+
+	goto z;                                //回到以前重新输入
+	}
+	getchar();
+	if(z1==1)                               //打开原来文件
+	{
+		z4=fopen("d:\\temp\\temp.txt","rb");
+		while(!feof(z4))                           //判断文件是否结束
+			if(fread(&pro[z2++],sizeof(struct pro),1,z4)==1)     //统计文件中记录的条数
+				z3++;
+				//printf("%d",z3);                  //z3大小查看
+		if(z3==0)
+			printf("\n\n\t\t没有商品,请先添加商品!!!\n");
+		else
+		{
+		fflush(stdin);
+		printf("\n\n编号\t品名\t生产商\t生产日期\t价格\t数量\t备注\n");
+		for(z2=0;z2<z3;z2++)
+		{
+		//printf("%d\n\n",z2);
+		//fread(&pro[z2],sizeof(struct pro),1,z4);  
+		printf("%d\t",pro[z2].id+1);
+
+		printf("%s\t",pro[z2].name);
+
+		printf("%s\t",pro[z2].producer);
+
+		printf("%s\t",pro[z2].date);
+
+		printf("%d\t",pro[z2].price);
+	
+		printf("%d\t",pro[z2].amount);
+
+		printf("%s\n",pro[z2].beizhu);
+
+		}
+	
+
+		puts("");                                      //增大距离
+	
+		do
+		{
+		
+		printf("编号(见上表)\n");
+	z5:	scanf("%d",&z2);
+		//for(z1=0;z1<z3;z1++)
+	//	i=pro[z1].id-pro[z2-1].id;                    //是否一样，存在
+	//	if(!i)
+	//	{
+	//	printf("\t\t\t编号不存在，请重新输入!!!\n");
+	//	goto z5;
+	//	}
+	
+		
+		printf("数量\n");
+	z6:	scanf("%d",&z1);
+			//for(z3=0;z3<z2;z3++)
+		if(z1>pro[z2-1].amount)
+		{
+		printf("\t\t\t库存不足，请先添加!!!\n");
+		goto z6;
+		}
+		pro[z2-1].amount-=z1;
+		printf("共计:%d元\n\n",z1*pro[z2-1].price);
+	
+		getchar();                           //暂停，给打\t留下时间
+		ch=getchar();
+		}while(ch!='\t');
+		fclose(z4);
+		
+		z4=fopen("d:\\temp\\temp.txt","wb");
+	//	pro[z2-1].amount -=z1;
+		for(i=0;i<z3;i++)
+		//fwrite(&pro[z2],sizeof(struct pro),1,z4);
+		{	
+			fwrite(&pro[i],sizeof(struct pro),1,z4);
+		}
+		fclose(z4);
+
+		}
+	}
+}
+void deleteproduct()                   //商品删除
+{
+
+	FILE* z4;                          //
+	int z1,z2=0,z3=0;                          //选择
+	char ch;
+
+	struct pro                   //商品保存结构体
+	{
+		int id;
+		char name[25];
+		char producer[25];
+		char date[30];
+		int price;
+		int amount;
+		char beizhu[80];
+	}pro[100],all[100];
+z:	system("cls");                    //清除上一页
+	printf("              |                                                   |\n");
+	printf("              |                  欢迎进入商品删除                 |\n");
+	printf("              |                                                   |\n");	
+	printf("              |            1.删除商品           2.退出            |\n");
+	printf("              |---------------------------------------------------|\n");
+	printf("                            您的选择:");
+	scanf("%d",&z1);
+	if(z1>2||z1<1)                             //判断选择功能是否正确
+	{                           
+	printf("\n                  您输入的选项不存在，请3秒后重新选择!!!\n");
+	Sleep(3000);                            //延时3秒
+
+	goto z;                                //回到以前重新输入
+	}
+	getchar();
+	if(z1==1)
+	{
+		z4=fopen("d:\\temp\\temp.txt","rb");
+		while(!feof(z4))                           //判断文件是否结束
+			if(fread(&pro[z2++],sizeof(struct pro),1,z4)==1)     //统计文件中记录的条数
+				z3++;
+				//printf("%d",z3);                  //z3大小查看
+		if(z3==0)
+			printf("\n\n\t\t没有商品,请先添加商品!!!\n");
+		else
+		{
+		fflush(stdin);
+		printf("\n\n编号\t品名\t生产商\t生产日期\t价格\t数量\t备注\n");
+		for(z2=0;z2<z3;z2++)
+		{
+		//printf("%d\n\n",z2);
+		//fread(&pro[z2],sizeof(struct pro),1,z4);  
+		printf("%d\t",pro[z2].id+1);
+
+		printf("%s\t",pro[z2].name);
+
+		printf("%s\t",pro[z2].producer);
+
+		printf("%s\t",pro[z2].date);
+
+		printf("%d\t",pro[z2].price);
+	
+		printf("%d\t",pro[z2].amount);
+
+		printf("%s\n",pro[z2].beizhu);
+
+		}
+		}
+
+	printf("你要删除商品的编号:");
+	scanf("%d",&z2);
+
+	for(int i = 0;i< z3-1;i++)
+	{
+		if(pro[z1].id == z2)
+		{
+
+			for(int j = i;j<z3-1;j++){
+				pro[j] = pro[j+1];
+		}
+			if(i == z3-1)
+			{
+				memset(&pro[i],0,sizeof(struct pro));  
+				
+			}
+			break;
+		}
+	}
+
+		//if(z2-1<z3)                             //判断是否要改编号
+		for(i=z2;i-1<z3;i++)                  //用循环改编号
+		{
+		pro[z2].id=i;                      //我要改的这条的后面一条的id变为我选择改的这条
+		}
+	
+		printf("\t\t\t\t删除成功!!!\n");
+		z4=fopen("d:\\temp\\temp.txt","wb");
+	//	pro[z2-1].amount -=z1;
+		for(i=0;i<z3-1;i++)
+		//fwrite(&pro[z2],sizeof(struct pro),1,z4);
+		{	
+			fwrite(&pro[i],sizeof(struct pro),1,z4);
+		}
+		fclose(z4);
+	}
+
+}
+void modifyproduct()                   //商品修改
+{
+	FILE* z4;                          //
+	int z1,z2=0,z3=0,i;                          //选择
+	char ch;
+	struct pro                   //商品保存结构体
+	{
+		int id;
+		char name[25];
+		char producer[25];
+		char date[30];
+		int price;
+		int amount;
+		char beizhu[80];
+	}pro[100],all[100];
+z:	system("cls");                    //清除上一页
+	printf("              |                                                   |\n");
+	printf("              |                  欢迎进入修改商品                 |\n");
+	printf("              |                                                   |\n");	
+	printf("              |            1.修改商品           2.退出            |\n");
+	printf("              |---------------------------------------------------|\n");
+	printf("                            您的选择:");
+	scanf("%d",&z1);
+	if(z1>2||z1<1)                             //判断选择功能是否正确
+	{                           
+	printf("\n                  您输入的选项不存在，请3秒后重新选择!!!\n");
+	Sleep(3000);                            //延时3秒
+
+	goto z;                                //回到以前重新输入
+	}
+	getchar();
+	if(z1==1)                               //打开原来文
+	{
+		z4=fopen("d:\\temp\\temp.txt","rb");
+		while(!feof(z4))                           //判断文件是否结束
+			if(fread(&pro[z2++],sizeof(struct pro),1,z4)==1)     //统计文件中记录的条数
+				z3++;
+				//printf("%d",z3);                  //z3大小查看
+		if(z3==0)
+			printf("\n\n\t\t没有商品,请先添加商品!!!\n");
+		else
+		{
+		fflush(stdin);
+		printf("\n\n编号\t品名\t生产商\t生产日期\t价格\t数量\t备注\n");
+		for(z2=0;z2<z3;z2++)
+		{
+		//printf("%d\n\n",z2);
+		//fread(&pro[z2],sizeof(struct pro),1,z4);  
+		printf("%d\t",pro[z2].id+1);
+
+		printf("%s\t",pro[z2].name);
+
+		printf("%s\t",pro[z2].producer);
+
+		printf("%s\t",pro[z2].date);
+
+		printf("%d\t",pro[z2].price);
+	
+		printf("%d\t",pro[z2].amount);
+
+		printf("%s\n",pro[z2].beizhu);
+
+		}
+		}
+
+		fclose(z4);
+		printf("输去你要修改的文件编号:");
+	z6:scanf("%d",&z2);
+		z2=z2-1;                                  //往后推移
+		if(z2>=z3)
+		{
+			printf("\t\t\t编号错误,请重新输入!!!\n");
+			goto z6;
+
+		}
+		printf("\n\n编号\t品名\t生产商\t生产日期\t价格\t数量\t备注\n");//找出要改的那一条
+		//for(z2=0;z2<z3;z2++)
+
+		//printf("%d\n\n",z2);
+		//fread(&pro[z2],sizeof(struct pro),1,z4);  
+		printf("%d\t",pro[z2-1].id+1);
+
+		printf("%s\t",pro[z2-1].name);
+
+		printf("%s\t",pro[z2-1].producer);
+
+		printf("%s\t",pro[z2-1].date);
+
+		printf("%d\t",pro[z2-1].price);
+	
+		printf("%d\t",pro[z2-1].amount);
+
+		printf("%s\n",pro[z2-1].beizhu);
+
+		printf("\n你要修改的信息:\n");
+		printf("1.品名\t2.生产商\t3.生产日期\t4,价格\t5.数量\t6.备注\n");
+		printf("你的选择是");
+		scanf("%d",&z1);
+		switch(z1)
+		{
+		case 1:
+			printf("请输入新品名:");
+			scanf("%s",&pro[z2-1].name);
+			break ;
+		case 2:
+			printf("请输入新生产商:");
+			scanf("%s",&pro[z2-1].producer);
+			break ;
+		case 3:
+			printf("请输入新日期:");
+			scanf("%s",&pro[z2-1].date);
+			break ;
+		case 4:
+			printf("请输入新价格:");
+			scanf("%d",&pro[z2-1].price);
+			break ;
+		case 5:
+			printf("请输入新数目:");
+			scanf("%d",&pro[z2-1].amount);
+			break ;
+		case 6:
+			printf("请输入新备注:");
+			scanf("%s",&pro[z2-1].beizhu);
+			break ;
+		deflaut:
+			printf("\t\t\t你输入的选项有问题!!!\n");
+               break;
+
+		}
+		printf("\n\n\t\t\t\t修改成功!!!\n");
+		z4=fopen("d:\\temp\\temp.txt","wb");
+	//	pro[z2-1].amount -=z1;
+		for(i=0;i<z3;i++)
+		//fwrite(&pro[z2],sizeof(struct pro),1,z4);
+		{	
+			fwrite(&pro[i],sizeof(struct pro),1,z4);
+		}
+		fclose(z4);		
+	}
+
+	
+
+
+
+}
+
+
+void searchproduct()                   //商品查询
+{
+FILE* z4;                          //
+	int z1,z2=0,z3=0;                          //选择
+	char ch;
+	struct pro                   //商品保存结构体
+	{
+		int id;
+		char name[25];
+		char producer[25];
+		char date[30];
+		int price;
+		int amount;
+		char beizhu[80];
+	}pro[100],all[100];
+z:	system("cls");                    //清除上一页
+	printf("              |                                                   |\n");
+	printf("              |                  欢迎进入查找商品                 |\n");
+	printf("              |                                                   |\n");	
+	printf("              |            1.查找商品           2.退出            |\n");
+	printf("              |---------------------------------------------------|\n");
+	printf("                            您的选择:");
+	scanf("%d",&z1);
+	if(z1>2||z1<1)                             //判断选择功能是否正确
+	{                           
+	printf("\n                  您输入的选项不存在，请3秒后重新选择!!!\n");
+	Sleep(3000);                            //延时3秒
+
+	goto z;                                //回到以前重新输入
+	}
+	getchar();
+	if(z1==1)                               //打开原来文件
+	{
+	z4=fopen("d:\\temp\\temp.txt","rb");
+		while(!feof(z4))                           //判断文件是否结束
+			if(fread(&pro[z2++],sizeof(struct pro),1,z4)==1)     //统计文件中记录的条数
+				z3++;
+				//printf("%d",z3);                  //z3大小查看
+		if(z3==0)
+			printf("\n\n\t\t没有商品,请先添加商品!!!\n");
+		else
+		{
+		printf("你要查询商品的id:");
+	z6:scanf("%d",&z2);
+		z2=z2-1;                                  //往后推移
+		if(z2>=z3)
+		{
+			printf("\t\t\t编号错误,请重新输入!!!\n");
+			goto z6;
+
+		}
+		fflush(stdin);
+		printf("\n\n编号\t品名\t生产商\t生产日期\t价格\t数量\t备注\n");
+		
+		//printf("%d\n\n",z2);
+		//fread(&pro[z2],sizeof(struct pro),1,z4);  
+		printf("%d\t",pro[z2].id+1);
+
+		printf("%s\t",pro[z2].name);
+
+		printf("%s\t",pro[z2].producer);
+
+		printf("%s\t",pro[z2].date);
+
+		printf("%d\t",pro[z2].price);
+	
+		printf("%d\t",pro[z2].amount);
+
+		printf("%s\n",pro[z2].beizhu);
+
+		
+		fclose(z4);
+		puts("");                        //增大距离
+		}
+	}
+	
+}
+void showproduct()                   //商品显示
+{
+	FILE* z4;                          //
+	int z1,z2=0,z3=0;                          //选择
+	char ch;
+	struct pro                   //商品保存结构体
+	{
+		int id;
+		char name[25];
+		char producer[25];
+		char date[30];
+		int price;
+		int amount;
+		char beizhu[80];
+	}pro[100];
+z:	system("cls");                    //清除上一页
+	printf("              |                                                   |\n");
+	printf("              |                  欢迎进入查看商品                 |\n");
+	printf("              |                                                   |\n");	
+	printf("              |            1.查看商品           2.退出            |\n");
+	printf("              |---------------------------------------------------|\n");
+	printf("                            您的选择:");
+	scanf("%d",&z1);
+	if(z1>2||z1<1)                             //判断选择功能是否正确
+	{                           
+	printf("\n                  您输入的选项不存在，请3秒后重新选择!!!\n");
+	Sleep(3000);                            //延时3秒
+
+	goto z;                                //回到以前重新输入
+	}
+	getchar();
+	if(z1==1)                               //打开原来文件
+	{
+		
+		if((z4=fopen("d:\\temp\\temp.txt","rb"))==NULL)
+		{
+			printf("\n          打开文件失败");
+			return ;
+		}
+		while(!feof(z4))                           //判断文件是否结束
+			if(fread(&pro[z2++],sizeof(struct pro),1,z4)==1)     //统计文件中记录的条数
+				z3++;
+				//printf("%d",z3);                  //z3大小查看
+		if(z3==0)
+			printf("\n\n\t\t\t没有商品,请先添加商品!!!\n");
+		else
+		{
+		fflush(stdin);
+		printf("\n\n编号\t品名\t生产商\t生产日期\t价格\t数量\t备注\n");
+		for(z2=0;z2<z3;z2++)
+		{
+		//printf("%d\n\n",z2);
+		//fread(&pro[z2],sizeof(struct pro),1,z4);  
+		printf("%d\t",pro[z2].id+1);
+
+		printf("%s\t",pro[z2].name);
+
+		printf("%s\t",pro[z2].producer);
+
+		printf("%s\t",pro[z2].date);
+
+		printf("%d\t",pro[z2].price);
+	
+		printf("%d\t",pro[z2].amount);
+
+		printf("%s\n",pro[z2].beizhu);
+
+		}
+		fclose(z4);	
+		}
+	}
+	if(z1==2)
+		return ;
+}
+void all()                            //商品订单查询，汇总
+{
+FILE* z4;  
+	FILE* Z7;
+	int z1,z2=0,z3=0,i,z8;                          //选择
+	char ch;
+
+	struct pro                   //商品保存结构体
+	{
+		int id;//4
+		char name[25];//28
+		char producer[25];//28
+		char date[30];//32
+		int price;//4
+		int amount;//4
+		char beizhu[80];//80
+	}pro[100],all[100];
+z:	system("cls");                    //清除上一页
+	printf("              |                                                   |\n");
+	printf("              |                  欢迎进入商品添加                 |\n");
+	printf("              |                                                   |\n");	
+	printf("              |            1.添加商品           2.退出            |\n");
+	printf("              |---------------------------------------------------|\n");
+	printf("                            您的选择:");
+	scanf("%d",&z1);
+	if(z1>2||z1<1)                             //判断选择功能是否正确
+	{                           
+	printf("\n                  您输入的选项不存在，请3秒后重新选择!!!\n");
+	Sleep(3000);                            //延时3秒
+
+	goto z;                                //回到以前重新输入
+	}
+	getchar();
+	if(z1==1)   ;                            //打开原来文件
+	{
+}
+
+
+
+
+int main()                             //门函数，进入各个子函数
+{
+
+
+	int a;                             //选择
+	
+loop: showmenu(); 
+printf("\n\n                          您的选择:");                            //展示主菜单
+scanf("%d",&a);                          //取a的值
+if(a>7||a<1)                             //判断选择功能是否正确
+{                           
+printf("                  您输入的选项不存在，请3秒后重新选择!!!\n");
+Sleep(3000);                            //延时5秒
+
+goto loop;                                //回到以前重新输入
+}
+else
+switch(a)                               //选择功能
+{
+	case 1:
+	inputproduct();                       //商品的添加
+	break;
+	case 2:
+	outputproduct();                       //商品的销售
+	break;
+	case 3:
+	deleteproduct();                       //删除商品
+	break;
+	case 4:
+	modifyproduct();                       //修改商品
+	break;
+	case 5:
+	searchproduct();                       //查询的添加
+	break;
+	case 6:
+	showproduct();                       //显示商品
+	break;
+	case 7:
+	all();                               //商品订单查询，汇总
+	break;
+}
+return 0;
+}

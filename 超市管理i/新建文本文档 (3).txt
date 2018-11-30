@@ -1,0 +1,149 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<windows.h>
+#include<time.h>
+void showmenu()          //显示主菜单
+{
+	system("cls");
+	printf("\n\n\n\n");
+	printf("              |----------------------商品管理---------------------|\n");
+	printf("              |                                                   |\n");
+	printf("              |                                                   |\n");
+	printf("              |             1.添加商品                            |\n");
+	printf("              |             2.销售商品                            |\n");
+	printf("              |             3.删除商品                            |\n");
+	printf("              |             4.修改商品                            |\n");
+	printf("              |             5.查询商品                            |\n");
+	printf("              |             6.显示商品                            |\n");
+	printf("              |             7.订单查询                            |\n");
+	printf("              |                                                   |\n");
+	printf("              |          请您从1—7中作出选择!!!                  |\n");
+	printf("              |                                                   |\n");
+	printf("              |                                                   |\n");
+	printf("              |---------------------------------------------------|\n");
+
+}
+
+
+void inputproduct()                   //商品添加
+{
+
+	FILE* z4;                          //
+	int z1;                          //选择
+	char ch;
+	struct pro                   //商品保存结构体
+	{
+		int id;
+		char name[15];
+		char producer[15];
+		char date[15];
+		double price;
+		int amount;
+	}a1[200];
+z:	system("cls");                    //清除上一页
+	printf("              |                                                   |\n");
+	printf("              |                  欢迎进入商品添加                 |\n");
+	printf("              |                                                   |\n");	
+	printf("              |            1.添加商品           2.退出            |\n");
+	printf("              |---------------------------------------------------|\n");
+	printf("                            您的选择:");
+	scanf("%d",&z1);
+	if(z1>2||z1<1)                             //判断选择功能是否正确
+	{                           
+	printf("                  您输入的选项不存在，请3秒后重新选择!!!\n");
+	Sleep(3000);                            //延时5秒
+
+	goto z;                                //回到以前重新输入
+	}
+	getchar();
+	if(z1==1)                               //打开原来文件
+	{
+		z4=fopen("d:\\temp\\temp.txt","r+");
+		if(z4!=NULL)
+		{
+		while(!feof(z4))
+			printf("%c",fgetc(z4));
+		    printf("\r");                    //回到首字符
+z5:	while((ch!='\t'))
+		{
+			scanf("%d",&a1[0].id);
+			fputc(,z4);
+		goto z5;
+		}
+		}
+		//else
+		//	printf("            文件打开失败         \n");
+	
+		fclose(z4);
+	}
+}
+void outputproduct()                   //商品销售
+{
+;
+}
+void deleteproduct()                   //商品删除
+{
+;
+}
+void modifyproduct()                   //商品修改
+{
+;
+}
+void searchproduct()                   //商品查询
+{
+;
+}
+void showproduct()                   //商品显示
+{
+;
+}
+void all()                            //商品订单查询，汇总
+{
+;
+}
+
+
+
+
+int main()                             //门函数，进入各个子函数
+{
+	int a;                             //选择
+	
+loop: showmenu(); 
+printf("\n\n                          您的选择:");                            //展示主菜单
+scanf("%d",&a);                          //取a的值
+if(a>7||a<1)                             //判断选择功能是否正确
+{                           
+printf("                  您输入的选项不存在，请3秒后重新选择!!!\n");
+Sleep(3000);                            //延时5秒
+
+goto loop;                                //回到以前重新输入
+}
+else
+switch(a)                               //选择功能
+{
+	case 1:
+	inputproduct();                       //商品的添加
+	break;
+	case 2:
+	outputproduct();                       //商品的销售
+	break;
+	case 3:
+	deleteproduct();                       //删除商品
+	break;
+	case 4:
+	modifyproduct();                       //修改商品
+	break;
+	case 5:
+	searchproduct();                       //查询的添加
+	break;
+	case 6:
+	showproduct();                       //显示商品
+	break;
+	case 7:
+	all();                               //商品订单查询，汇总
+	break;
+	
+}
+return 0;
+}
